@@ -1,0 +1,141 @@
+@import "tailwindcss";
+
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+
+  /* Paleta del flyer: crema + azul marino */
+  --navy: #0d1829;
+  --navy-mid: #1a2d4f;
+  --navy-light: #243665;
+  --cream: #faf6ee;
+  --cream-mid: #f0e9dc;
+  --cream-dark: #e2d8c8;
+  --gold: #b8922e;
+  --gold-light: #d4aa4a;
+
+  --foreground: #0d1829;
+  --muted: #6b7a94;
+  --border: #ddd5c2;
+  --border-focus: #0d1829;
+  --placeholder: #a89f8e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--navy);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Inputs ───────────────────────────────────────── */
+.form-input {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  padding: 0.75rem 1rem;
+  color: var(--foreground);
+  background: white;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  font-size: 0.9375rem;
+  font-family: var(--font-sans);
+}
+
+.form-input::placeholder {
+  color: var(--placeholder);
+}
+
+.form-input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(13, 24, 41, 0.08);
+}
+
+select.form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23a89f8e' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+/* ── Buttons ──────────────────────────────────────── */
+.btn-primary {
+  width: 100%;
+  border-radius: 9999px;
+  background: var(--navy);
+  padding: 0.9rem 1.5rem;
+  color: var(--cream);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: background 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--navy-mid);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.97);
+  transition: transform 0.05s ease;
+}
+
+.btn-primary:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  width: 100%;
+  border-radius: 9999px;
+  padding: 0.75rem 1.5rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: color 0.15s ease, transform 0.1s ease;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  background: transparent;
+}
+
+.btn-ghost:hover {
+  color: var(--foreground);
+}
+
+.btn-ghost:active {
+  transform: scale(0.98);
+}
+
+/* ── Card ─────────────────────────────────────────── */
+.card {
+  border-radius: 1.5rem;
+  background: var(--cream);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.08),
+    0 8px 24px rgba(0, 0, 0, 0.14),
+    0 32px 64px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Step transitions ─────────────────────────────── */
+@keyframes stepFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-content {
+  animation: stepFadeIn 220ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
