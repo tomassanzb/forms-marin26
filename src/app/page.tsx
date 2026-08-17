@@ -39,7 +39,7 @@ async function comprimirImagen(file: File, maxPx = 1600, quality = 0.82): Promis
 
 // ─── Configuración ────────────────────────────────────────────────────────────
 
-const PRECIO_ENTRADA = 13000;
+const PRECIO_ENTRADA = 12000;
 const ALIAS_PAGO = process.env.NEXT_PUBLIC_ALIAS_PAGO ?? "ALIAS.GRUPO.MISIONERO";
 const MAPS_URL = "https://maps.app.goo.gl/XdfyYyUC42b3sLhH8";
 
