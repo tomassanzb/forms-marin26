@@ -548,7 +548,7 @@ export default function Home() {
                                   onChange={(e) =>
                                     editarEntrada(i, "nombre", e.target.value)
                                   }
-                                  placeholder="María"
+                                  placeholder={i === 0 ? "Sebastián" : i === 1 ? "Mía" : "Nombre"}
                                   className="form-input"
                                 />
                               </div>
@@ -561,7 +561,7 @@ export default function Home() {
                                   onChange={(e) =>
                                     editarEntrada(i, "apellido", e.target.value)
                                   }
-                                  placeholder="García"
+                                  placeholder={i === 0 ? "Wilder" : i === 1 ? "Dolan" : "Apellido"}
                                   className="form-input"
                                 />
                               </div>
