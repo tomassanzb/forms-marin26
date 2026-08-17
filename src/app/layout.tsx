@@ -6,8 +6,8 @@ export const metadata: Metadata = {
   description:
     "Reservá tu entrada para la peña a beneficio del grupo misionero San Juan Pablo II.",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo-favicon.png",
+    apple: "/logo-favicon.png",
   },
 };
 
