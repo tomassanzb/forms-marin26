@@ -172,6 +172,9 @@ export default function Home() {
   const [loadingMisioneros, setLoadingMisioneros] = useState(true);
 
   const [misionero, setMisionero] = useState("");
+  const [busqueda, setBusqueda] = useState("");
+  const [dropdownAbierto, setDropdownAbierto] = useState(false);
+  const comboboxRef = useRef<HTMLDivElement>(null);
   const [cantidad, setCantidad] = useState(1);
   const [entradas, setEntradas] = useState<Entrada[]>([{ nombre: "", apellido: "" }]);
   const [mismoNombre, setMismoNombre] = useState(false);
@@ -189,6 +192,16 @@ export default function Home() {
     asistencia === "todos" ? cantidad :
     asistencia === "ninguno" ? 0 :
     cantidadAsistentes;
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (comboboxRef.current && !comboboxRef.current.contains(e.target as Node)) {
+        setDropdownAbierto(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetch("/api/misioneros")
@@ -288,6 +301,7 @@ export default function Home() {
 
   function reiniciar() {
     setMisionero("");
+    setBusqueda("");
     setCantidad(1);
     setEntradas([{ nombre: "", apellido: "" }]);
     setMismoNombre(false);
@@ -412,23 +426,51 @@ export default function Home() {
                         <label className="mb-2.5 block text-sm font-semibold text-[#0d1829]">
                           ¿Qué misionero te vendió las entradas?
                         </label>
-                        <select
-                          value={misionero}
-                          onChange={(e) => setMisionero(e.target.value)}
-                          disabled={loadingMisioneros}
-                          className="form-input"
-                        >
-                          <option value="">
-                            {loadingMisioneros
-                              ? "Cargando..."
-                              : "Seleccioná un misionero"}
-                          </option>
-                          {misioneros.map((m) => (
-                            <option key={m} value={m}>
-                              {m}
-                            </option>
-                          ))}
-                        </select>
+                        <div ref={comboboxRef} className="relative">
+                          <input
+                            value={misionero || busqueda}
+                            onChange={(e) => {
+                              setBusqueda(e.target.value);
+                              setMisionero("");
+                              setDropdownAbierto(true);
+                            }}
+                            onFocus={() => setDropdownAbierto(true)}
+                            placeholder={loadingMisioneros ? "Cargando..." : "Buscá tu misionero"}
+                            disabled={loadingMisioneros}
+                            className="form-input"
+                            autoComplete="off"
+                          />
+                          {dropdownAbierto && !loadingMisioneros && (
+                            <ul
+                              className="absolute z-50 mt-1 max-h-52 w-full overflow-y-auto rounded-xl border border-[#ddd5c2] bg-white shadow-lg"
+                            >
+                              {misioneros
+                                .filter((m) =>
+                                  m.toLowerCase().includes((misionero || busqueda).toLowerCase())
+                                )
+                                .map((m) => (
+                                  <li
+                                    key={m}
+                                    onMouseDown={() => {
+                                      setMisionero(m);
+                                      setBusqueda("");
+                                      setDropdownAbierto(false);
+                                    }}
+                                    className="cursor-pointer px-4 py-2.5 text-sm text-[#0d1829] hover:bg-[#f0e9dc]"
+                                  >
+                                    {m}
+                                  </li>
+                                ))}
+                              {misioneros.filter((m) =>
+                                m.toLowerCase().includes((misionero || busqueda).toLowerCase())
+                              ).length === 0 && (
+                                <li className="px-4 py-3 text-sm text-[#a89f8e]">
+                                  No encontramos ese misionero
+                                </li>
+                              )}
+                            </ul>
+                          )}
+                        </div>
                       </div>
 
                       {/* Resumen */}

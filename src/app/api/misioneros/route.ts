@@ -10,7 +10,8 @@ export async function GET() {
     const rows = await readSheet("Misioneros!A2:A");
     const misioneros = rows
       .map((r) => r[0]?.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .sort((a, b) => a.localeCompare(b, "es", { sensitivity: "base" }));
 
     return NextResponse.json({ misioneros });
   } catch (error) {
