@@ -175,6 +175,7 @@ export default function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [dropdownAbierto, setDropdownAbierto] = useState(false);
   const comboboxRef = useRef<HTMLDivElement>(null);
+  const enviandoRef = useRef(false);
   const [cantidad, setCantidad] = useState(1);
   const [entradas, setEntradas] = useState<Entrada[]>([{ nombre: "", apellido: "" }]);
   const [mismoNombre, setMismoNombre] = useState(false);
@@ -269,6 +270,8 @@ export default function Home() {
   }
 
   async function enviarFormulario() {
+    if (enviandoRef.current) return;
+    enviandoRef.current = true;
     try {
       setLoading(true);
       const fd = new FormData();
@@ -296,6 +299,7 @@ export default function Home() {
       alert("Hubo un error al enviar. Revisá tu conexión y volvé a intentar.");
     } finally {
       setLoading(false);
+      enviandoRef.current = false;
     }
   }
 
@@ -428,32 +432,31 @@ export default function Home() {
                         </label>
                         <div ref={comboboxRef} className="relative">
                           <input
-                            value={misionero || busqueda}
+                            value={busqueda}
                             onChange={(e) => {
                               setBusqueda(e.target.value);
                               setMisionero("");
                               setDropdownAbierto(true);
                             }}
-                            onFocus={() => setDropdownAbierto(true)}
+                            onFocus={() => {
+                              if (misionero) setBusqueda(misionero);
+                              setDropdownAbierto(true);
+                            }}
                             placeholder={loadingMisioneros ? "Cargando..." : "Buscá tu misionero"}
                             disabled={loadingMisioneros}
                             className="form-input"
                             autoComplete="off"
                           />
                           {dropdownAbierto && !loadingMisioneros && (
-                            <ul
-                              className="absolute z-50 mt-1 max-h-52 w-full overflow-y-auto rounded-xl border border-[#ddd5c2] bg-white shadow-lg"
-                            >
+                            <ul className="absolute z-50 mt-1 max-h-52 w-full overflow-y-auto rounded-xl border border-[#ddd5c2] bg-white shadow-lg">
                               {misioneros
-                                .filter((m) =>
-                                  m.toLowerCase().includes((misionero || busqueda).toLowerCase())
-                                )
+                                .filter((m) => m.toLowerCase().includes(busqueda.toLowerCase()))
                                 .map((m) => (
                                   <li
                                     key={m}
                                     onMouseDown={() => {
                                       setMisionero(m);
-                                      setBusqueda("");
+                                      setBusqueda(m);
                                       setDropdownAbierto(false);
                                     }}
                                     className="cursor-pointer px-4 py-2.5 text-sm text-[#0d1829] hover:bg-[#f0e9dc]"
@@ -461,9 +464,7 @@ export default function Home() {
                                     {m}
                                   </li>
                                 ))}
-                              {misioneros.filter((m) =>
-                                m.toLowerCase().includes((misionero || busqueda).toLowerCase())
-                              ).length === 0 && (
+                              {misioneros.filter((m) => m.toLowerCase().includes(busqueda.toLowerCase())).length === 0 && (
                                 <li className="px-4 py-3 text-sm text-[#a89f8e]">
                                   No encontramos ese misionero
                                 </li>
